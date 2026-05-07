@@ -49,6 +49,8 @@ def capture_lead(
         "contact_customer_service": True
     }
     
+    print(f"[DEBUG] capture_lead called with payload: {payload}")
+    
     try:
         api_url = "https://flexiboost.ie/api-capture-lead"
         response = requests.post(
@@ -60,9 +62,18 @@ def capture_lead(
             },
             timeout=15
         )
+        print(f"[DEBUG] API Response Status: {response.status_code}")
+        print(f"[DEBUG] API Response Text: {response.text}")
+        
         response.raise_for_status()
+        resp_json = response.json()
+        print(f"[DEBUG] Parsed JSON: {resp_json}")
+        if "message" not in resp_json:
+            raise ValueError(f"Server returned 200 but invalid JSON format: {response.text[:100]}")
+            
         return f"CRITICAL INSTRUCTION: The lead was successfully saved! Tell the user 'Success! I have shared your details with the Flexi Boost team.' and end the conversation."
     except Exception as e:
+        print(f"[DEBUG] API Request Exception: {str(e)}")
         print(f"Error sending lead to backend: {e}")
         return f"CRITICAL INSTRUCTION: The system FAILED to save the lead! You MUST apologize and tell the user to email info@flexiboost.ie directly. Do NOT say you collected their details."
 
