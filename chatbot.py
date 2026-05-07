@@ -13,19 +13,32 @@ import requests
 
 @tool
 def capture_lead(
-    name: str = Field(description="The user's name"),
-    email: str = Field(description="The user's email address"),
-    phone: str = Field(description="The user's phone number"),
-    company: str = Field(default="N/A", description="The user's company name"),
-    challenge: str = Field(default="N/A", description="The main business challenge the user wants to solve"),
-    service: str = Field(default="N/A", description="The service they are interested in"),
-    contact_method: str = Field(default="N/A", description="Preferred contact method"),
-    preferred_time: str = Field(default="N/A", description="Preferred time for a call-back"),
-    priority: str = Field(default="Medium", description="Lead priority based on intent"),
-    summary: str = Field(default="N/A", description="Summary of the conversation")
+    name: str,
+    email: str,
+    phone: str,
+    company: str = "N/A",
+    challenge: str = "N/A",
+    service: str = "N/A",
+    contact_method: str = "N/A",
+    preferred_time: str = "N/A",
+    priority: str = "Medium",
+    summary: str = "N/A"
 ):
     """
-    Capture and store lead information when a user provides their contact details and business needs.
+    Captures user lead information. Use this tool only when you have collected all the necessary details.
+    
+    Args:
+        name: The user's name
+        email: The user's email address
+        phone: The user's phone number
+        company: The user's company name
+        challenge: The main business challenge the user wants to solve
+        service: The service they are interested in
+        contact_method: Preferred contact method
+        preferred_time: Preferred time for a call-back
+        priority: Lead priority based on intent
+        summary: Summary of the conversation
+        
     Use this tool ONLY after you have collected: Name, Email, Phone, and Service.
     Provide a priority based on the urgency/complexity (e.g. API/CRM mentioned = High) and a summary for the team.
     """
