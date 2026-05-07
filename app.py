@@ -30,8 +30,13 @@ def save_sessions(data):
     with open(SESSION_FILE, 'w') as f:
         json.dump(data, f)
 
-# Create a single agent instance to reuse
-global_agent = create_chatbot_agent()
+global_agent = None
+
+def get_agent():
+    global global_agent
+    if global_agent is None:
+        global_agent = create_chatbot_agent()
+    return global_agent
 
 @app.after_request
 def add_header(response):
@@ -79,7 +84,8 @@ def chat():
                 chat_history.append(AIMessage(content=msg['content']))
             
     try:
-        response = global_agent.invoke({
+        agent = get_agent()
+        response = agent.invoke({
             "input": user_input,
             "chat_history": chat_history
         })
