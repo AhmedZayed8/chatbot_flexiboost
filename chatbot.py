@@ -16,31 +16,16 @@ def capture_lead(
     name: str,
     email: str,
     phone: str,
-    company: str = "N/A",
-    challenge: str = "N/A",
-    service: str = "N/A",
-    contact_method: str = "N/A",
-    preferred_time: str = "N/A",
-    priority: str = "Medium",
-    summary: str = "N/A"
+    service: str
 ):
     """
-    Captures user lead information. Use this tool only when you have collected all the necessary details.
+    Captures user lead information. Call this tool IMMEDIATELY when you have Name, Email, Phone, and Service.
     
     Args:
         name: The user's name
         email: The user's email address
         phone: The user's phone number
-        company: The user's company name
-        challenge: The main business challenge the user wants to solve
         service: The service they are interested in
-        contact_method: Preferred contact method
-        preferred_time: Preferred time for a call-back
-        priority: Lead priority based on intent
-        summary: Summary of the conversation
-        
-    Use this tool ONLY after you have collected: Name, Email, Phone, and Service.
-    Provide a priority based on the urgency/complexity (e.g. API/CRM mentioned = High) and a summary for the team.
     """
     payload = {
         "name": name,
