@@ -145,6 +145,10 @@ def send_whatsapp_message(to, text):
     except Exception as e:
         print(f"Error sending WhatsApp message: {e}")
 
+@app.route('/health')
+def health():
+    return 'OK', 200
+
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     if request.method == 'GET':
