@@ -325,8 +325,7 @@ const userInput = document.getElementById('user-input');
 const chatMessages = document.getElementById('chat-messages');
 const sendBtn = document.getElementById('send-btn');
 
-let sessionId = localStorage.getItem('session_id') || null;
-let chatHistory = JSON.parse(localStorage.getItem('chat_history') || '[]');
+let sessionId = null;
 
 const quickRepliesContainer = document.getElementById('quick-replies');
 
@@ -347,19 +346,6 @@ function appendMessage(role, content) {
     // Clear quick replies when a new message is added (unless it's the bot providing them)
     if (role === 'user') {
         clearQuickReplies();
-    }
-}
-
-// Restore history on load
-function restoreHistory() {
-    if (chatHistory && chatHistory.length > 0) {
-        // Clear default welcome message if we have history
-        const existingMessages = document.querySelectorAll('.message:not(#typing-indicator)');
-        existingMessages.forEach(msg => msg.remove());
-        
-        chatHistory.forEach(msg => {
-            appendMessage(msg.type === 'human' ? 'user' : 'bot', msg.content);
-        });
     }
 }
 
@@ -390,13 +376,12 @@ async function handleButtonClick(text) {
 
 async function sendMessage(message) {
     try {
-        const response = await fetch('/chat', {
+        const response = await fetch('/chatbot/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 message: message,
-                session_id: sessionId,
-                history: chatHistory
+                session_id: sessionId 
             })
         });
 
@@ -411,11 +396,6 @@ async function sendMessage(message) {
             }
             if (data.session_id) {
                 sessionId = data.session_id;
-                localStorage.setItem('session_id', sessionId);
-            }
-            if (data.history) {
-                chatHistory = data.history;
-                localStorage.setItem('chat_history', JSON.stringify(chatHistory));
             }
         } else if (data.error) {
             appendMessage('bot', "I'm sorry, I encountered an error. Please try again later.");
@@ -457,18 +437,14 @@ chatForm.addEventListener('submit', async (e) => {
 
 // Initial Welcome Menu (Optional: if you want it to show on load)
 window.onload = () => {
-    restoreHistory();
-    
-    // Only show default replies if there's no history
-    if (!chatHistory || chatHistory.length === 0) {
-        renderQuickReplies([
-            "Automate my business",
-            "Improve Google ranking",
-            "Build custom tool",
-            "Request a call-back",
-            "Get a quote"
-        ]);
-    }
+    // You could trigger a 'welcome' message here if needed
+    renderQuickReplies([
+        "Automate my business",
+        "Improve Google ranking",
+        "Build custom tool",
+        "Request a call-back",
+        "Get a quote"
+    ]);
 };
     </script>
 </body>
